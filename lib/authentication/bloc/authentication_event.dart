@@ -10,4 +10,7 @@ final class _AuthenticationStatusChanged extends AuthenticationEvent {
   final AuthenticationStatus status;
 }
 
-final class AuthenticationLogoutRequested extends AuthenticationEvent {}
+final class AuthenticationLogoutRequested extends AuthenticationEvent {
+  AuthenticationLogoutRequested({this.clearCache = false});
+  bool clearCache;
+}

@@ -64,7 +64,7 @@ class AuthenticationBloc
     AuthenticationLogoutRequested event,
     Emitter<AuthenticationState> emit,
   ) {
-    _authenticationRepository.logOut();
+    _authenticationRepository.logOut(event.clearCache);
   }
 
   Future<User?> _tryGetOTP(User? user) async {

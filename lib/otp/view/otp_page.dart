@@ -25,7 +25,7 @@ class OTPPage extends StatelessWidget {
             onPressed: () {
               context
                   .read<AuthenticationBloc>()
-                  .add(AuthenticationLogoutRequested());
+                  .add(AuthenticationLogoutRequested(clearCache: true));
             },
           )
         ],

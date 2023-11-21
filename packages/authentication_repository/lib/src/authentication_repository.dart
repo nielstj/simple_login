@@ -5,6 +5,9 @@ enum AuthenticationStatus { unknown, authenticated, verified, unauthenticated }
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
 
+  String? _username;
+  String? _password;
+
   Stream<AuthenticationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
     yield AuthenticationStatus.unauthenticated;
@@ -17,7 +20,16 @@ class AuthenticationRepository {
   }) async {
     await Future.delayed(
       const Duration(milliseconds: 300),
-      () => _controller.add(AuthenticationStatus.authenticated),
+      () {
+        if (username == _username && _password == password) {
+          _controller.add(AuthenticationStatus.verified);
+        } else {
+          _username = username;
+          _password = password;
+
+          _controller.add(AuthenticationStatus.authenticated);
+        }
+      },
     );
   }
 
@@ -37,13 +49,19 @@ class AuthenticationRepository {
         if (password == '111111') {
           _controller.add(AuthenticationStatus.verified);
         } else {
+          _username = null;
+          _password = null;
           throw Exception('something went wrong');
         }
       },
     );
   }
 
-  void logOut() {
+  void logOut(bool clearCache) {
+    if (clearCache) {
+      _username = null;
+      _password = null;
+    }
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
